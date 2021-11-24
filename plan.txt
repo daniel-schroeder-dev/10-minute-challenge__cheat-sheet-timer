@@ -1,0 +1,89 @@
+CWHQ lessons have "Cheat Sheets" which instructors leave up so students can
+have some helpful hints while they complete an exercise. The time instructors
+leave these up varies, but should be between 10-30 seconds per line of code,
+depending on the age level and course. It would be nice to have a simple
+timer app that had the following functionality:
+
+
+
+File Structure
+    - Do everything in index.html
+        - <style> tag in <head>
+        - <script> tag at end of <body>
+    - Put the .mp3 file in the main folder
+
+
+Hosting
+    - GitHub Pages
+
+
+HTML
+
+- Simple UI, modal window with basic form controls and labels for each
+    - Can use a <form> element.
+    - Make sure to use <label> properly.
+    - Buttons should be type="button" to prevent form submit.
+- <p> that holds the timeTillAlarm (timeTillAlarmText)
+- Input to increase/decrease numCodeLines in Cheat Sheet
+    - Use <input type="number">
+    - Use min attr to make sure this can't be negative
+- Input to set secondsPerLine (of code)
+    - Use <input type="number">
+    - Use min/max attr to make this between 10-30
+- Button to start timer
+    - Use <button type="button">
+- Button to stop timer/alarm
+    - Use <button type="button">
+- An alarm that rings when the timer is up
+    - <audio> element
+    - Get the sound from freesound.org
+
+CSS
+    - Center the <form> on the page
+        - Maybe give it a border or some box shadow if you have time
+    - Can use flex-direction column to have everything stack vertically (I think)
+
+
+
+JS
+
+- Get all the <button> and <input> elements and store in variables
+    - numCodeLinesInput
+    - secondsPerLineInput
+    - startButton
+    - stopButton
+- Get the timeTillAlarmText and store in a variable
+    - This has to sync with tick()
+- Get the audio element
+    - alarmAudio
+    - This will be run by ringAlarm()
+- Use global variables for:
+    - tickInterval
+- Setup click handlers on
+    - startButton --> startTimer
+    - stopButton --> stopTimer
+- startTimer()
+    - Calculate the time before the alarm should ring
+        - timeTillAlarm = numCodeLinesInput.value * secondsPerLineInput.value
+    - Use a setInterval() to run tick()
+        - Set the tickInterval here
+- tick()
+    - Should remove one from the timeTillAlarm
+    - Update the timeTillAlarmText
+    - If the timeTillAlarm is 0
+        - run ringAlarm()
+        - clear the tickInterval
+        - Make timeTillAlarm text an empty string
+- ringAlarm()
+    - Is run by tick()
+    - Should play the audio element
+        - alarmAudio.play()
+- stopTimer()
+    - Should cancel the tickInterval
+    - make timeTillAlarm text an empty string
+    - Should pause the audio element
+        - alarmAudio.pause()
+    - Should reset these to 0
+        - timeTillAlarm
+        - numCodeLines
+        - secondsPerLine
