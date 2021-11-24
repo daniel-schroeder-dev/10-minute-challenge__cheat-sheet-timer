@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CWHQ Cheat Sheet Timer</title>
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 50vw;
+            margin: 0 auto;
+        }
+        form > * {
+            margin: 12px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+    <form>
+        <p id="timeTillAlarm"></p>
+        <input type="number" id="numCodeLines" placeholder="Number of code lines"/>
+        <input type="number" id="secondsPerLine" placeholder="Seconds per line" />
+        <button type="button" id="start">Start</button>
+        <button type="button" id="stop">Stop</button>
+    </form>
+
+    <audio src="alarm.mp3" id="alarmSound"></audio>
+    
+    <script>
+        const timeTillAlarmText = document.getElementById("timeTillAlarm");
+        const numCodeLinesInput = document.getElementById("numCodeLines");
+        const secondsPerLineInput = document.getElementById("secondsPerLine");
+        const startButton = document.getElementById("start");
+        const stopButton = document.getElementById("stop");
+        const alarmSound = document.getElementById("alarmSound");
+
+        let tickInterval;
+        let timeTillAlarm = 0;
+
+        startButton.addEventListener("click", start);
+        stopButton.addEventListener("click", stop);
+
+
+        function start() {
+            timeTillAlarm = secondsPerLineInput.value * numCodeLinesInput.value + 1;
+            tickInterval = setInterval(tick, 1000);
+        }
+
+        function stop() {
+            alarmSound.pause();
+            clearInterval(tickInterval);
+            timeTillAlarmText.textContent = "";
+            clearStuff();
+        }
+
+        function clearStuff() {
+            timeTillAlarm = 0;
+            tickInterval = 0;
+            secondsPerLineInput.value = 0;
+            numCodeLinesInput.value = 0;
+        }
+
+        function tick() {
+            timeTillAlarm--;
+            timeTillAlarmText.textContent = timeTillAlarm;
+            if (!timeTillAlarm) {
+                clearInterval(tickInterval);
+                ringAlarm();
+                clearStuff()
+                timeTillAlarmText.textContent = "";
+            }
+        }
+
+        function ringAlarm() {
+            alarmSound.play();
+        }
+
+    </script>
+</body>
+</html>
